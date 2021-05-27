@@ -140,11 +140,10 @@ func hashLarge(p unsafe.Pointer, length uint64) (acc uint64) {
 		accumScalar(&xacc, p, xsecret, length)
 	}
 	//merge xacc
-	acc += mix(xacc[0]^unalign.Read8(xsecret, 11), xacc[1]^unalign.Read8(xsecret, 19))
-	acc += mix(xacc[2]^unalign.Read8(xsecret, 27), xacc[3]^unalign.Read8(xsecret, 35))
-	acc += mix(xacc[4]^unalign.Read8(xsecret, 43), xacc[5]^unalign.Read8(xsecret, 51))
-	acc += mix(xacc[6]^unalign.Read8(xsecret, 59), xacc[7]^unalign.Read8(xsecret, 67))
-
+	acc += mix(xacc[0]^key64_011, xacc[1]^key64_019)
+	acc += mix(xacc[2]^key64_027, xacc[3]^key64_035)
+	acc += mix(xacc[4]^key64_043, xacc[5]^key64_051)
+	acc += mix(xacc[6]^key64_059, xacc[7]^key64_067)
 	return xxh3Avalanche(acc)
 }
 

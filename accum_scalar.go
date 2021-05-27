@@ -1,189 +1,215 @@
 package xxhash3
 
 import (
-	"./internal/unalign"
 	"unsafe"
+	"./internal/unalign"
 )
+var(
+key64_128 uint64 = 0xc3ebd33483acc5ea
+key64_136 uint64 = 0xeb6313faffa081c5
+key64_144 uint64 = 0x49daf0b751dd0d17
+key64_152 uint64 = 0x9e68d429265516d3
+key64_160 uint64 = 0xfca1477d58be162b
+key64_168 uint64 = 0xce31d07ad1b8f88f
+key64_176 uint64 = 0x280416958f3acb45
+key64_184 uint64 = 0x7e404bbbcafbd7af
 
-func accumScalar(xacc *[8]uint64, xinput, xsecret unsafe.Pointer, l uint64) {
-	j := uint64(0)
+	key64_121 uint64 = 0xea647378d9c97e9f
+	key64_129 uint64 = 0xc5c3ebd33483acc5
+	key64_137 uint64 = 0x17eb6313faffa081
+	key64_145 uint64 = 0xd349daf0b751dd0d
+	key64_153 uint64 = 0x2b9e68d429265516
+	key64_161 uint64 = 0x8ffca1477d58be16
+	key64_169 uint64 = 0x45ce31d07ad1b8f8
+	key64_177 uint64 = 0xaf280416958f3acb
 
-	// Loops over block, process 16*8*8=1024 bytes of data each iteration
-	for ; j < (l-1)/1024; j++ {
-		k := xsecret
+	key64_011 uint64 = 0x6dd4de1cad21f72c
+	key64_019 uint64 = 0xa44072db979083e9
+	key64_027 uint64 = 0xe679cb1f67b3b7a4
+	key64_035 uint64 = 0xd05a8278e5c0cc4e
+	key64_043 uint64 = 0x4608b82172ffcc7d
+	key64_051 uint64 = 0x9035e08e2443f774
+	key64_059 uint64 = 0x52283c4c263a81e6
+	key64_067 uint64 = 0x65d088cb00c391bb
+)
+func accumScalar(accs *[8]uint64, p, key unsafe.Pointer, l uint64) {
+	for l > _block {
+		k := key
+
+		// accs
 		for i := 0; i < 16; i++ {
-			dataVec0 := unalign.Read8(xinput, 8*0)
-			keyVec := dataVec0 ^ unalign.Read8(k, 8*0)
-			xacc[1] += dataVec0
-			xacc[0] += (keyVec & 0xffffffff) * (keyVec >> 32)
+			dv0 := unalign.Read8(p, 8*0)
+			dk0 := dv0 ^ unalign.Read8(k, 8*0)
+			accs[1] += dv0
+			accs[0] += (dk0 & 0xffffffff) * (dk0 >> 32)
 
-			dataVec1 := unalign.Read8(xinput, 8*1)
-			keyVec1 := dataVec1 ^ unalign.Read8(k, 8*1)
-			xacc[0] += dataVec1
-			xacc[1] += (keyVec1 & 0xffffffff) * (keyVec1 >> 32)
+			dv1 := unalign.Read8(p, 8*1)
+			dk1 := dv1 ^ unalign.Read8(k, 8*1)
+			accs[0] += dv1
+			accs[1] += (dk1 & 0xffffffff) * (dk1 >> 32)
 
-			dataVec2 := unalign.Read8(xinput, 8*2)
-			keyVec2 := dataVec2 ^ unalign.Read8(k, 8*2)
-			xacc[3] += dataVec2
-			xacc[2] += (keyVec2 & 0xffffffff) * (keyVec2 >> 32)
+			dv2 := unalign.Read8(p, 8*2)
+			dk2 := dv2 ^ unalign.Read8(k, 8*2)
+			accs[3] += dv2
+			accs[2] += (dk2 & 0xffffffff) * (dk2 >> 32)
 
-			dataVec3 := unalign.Read8(xinput, 8*3)
-			keyVec3 := dataVec3 ^ unalign.Read8(k, 8*3)
-			xacc[2] += dataVec3
-			xacc[3] += (keyVec3 & 0xffffffff) * (keyVec3 >> 32)
+			dv3 := unalign.Read8(p, 8*3)
+			dk3 := dv3 ^ unalign.Read8(k, 8*3)
+			accs[2] += dv3
+			accs[3] += (dk3 & 0xffffffff) * (dk3 >> 32)
 
-			dataVec4 := unalign.Read8(xinput, 8*4)
-			keyVec4 := dataVec4 ^ unalign.Read8(k, 8*4)
-			xacc[5] += dataVec4
-			xacc[4] += (keyVec4 & 0xffffffff) * (keyVec4 >> 32)
+			dv4 := unalign.Read8(p, 8*4)
+			dk4 := dv4 ^ unalign.Read8(k, 8*4)
+			accs[5] += dv4
+			accs[4] += (dk4 & 0xffffffff) * (dk4 >> 32)
 
-			dataVec5 := unalign.Read8(xinput, 8*5)
-			keyVec5 := dataVec5 ^ unalign.Read8(k, 8*5)
-			xacc[4] += dataVec5
-			xacc[5] += (keyVec5 & 0xffffffff) * (keyVec5 >> 32)
+			dv5 := unalign.Read8(p, 8*5)
+			dk5 := dv5 ^ unalign.Read8(k, 8*5)
+			accs[4] += dv5
+			accs[5] += (dk5 & 0xffffffff) * (dk5 >> 32)
 
-			dataVec6 := unalign.Read8(xinput, 8*6)
-			keyVec6 := dataVec6 ^ unalign.Read8(k, 8*6)
-			xacc[7] += dataVec6
-			xacc[6] += (keyVec6 & 0xffffffff) * (keyVec6 >> 32)
+			dv6 := unalign.Read8(p, 8*6)
+			dk6 := dv6 ^ unalign.Read8(k, 8*6)
+			accs[7] += dv6
+			accs[6] += (dk6 & 0xffffffff) * (dk6 >> 32)
 
-			dataVec7 := unalign.Read8(xinput, 8*7)
-			keyVec7 := dataVec7 ^ unalign.Read8(k, 8*7)
-			xacc[6] += dataVec7
-			xacc[7] += (keyVec7 & 0xffffffff) * (keyVec7 >> 32)
+			dv7 := unalign.Read8(p, 8*7)
+			dk7 := dv7 ^ unalign.Read8(k, 8*7)
+			accs[6] += dv7
+			accs[7] += (dk7 & 0xffffffff) * (dk7 >> 32)
 
-			xinput, k = unsafe.Pointer(uintptr(xinput)+_stripe), unsafe.Pointer(uintptr(k)+8)
+			l -= _stripe
+			if l > 0 {
+				p, k = unsafe.Pointer(uintptr(p)+_stripe), unsafe.Pointer(uintptr(k)+8)
+			}
 		}
 
-		// scramble xacc
-		xacc[0] ^= xacc[0] >> 47
-		xacc[0] ^= unalign.Read8(xsecret, 128)
-		xacc[0] *= prime32_1
+		// scramble accs
+		accs[0] ^= accs[0] >> 47
+		accs[0] ^= key64_128
+		accs[0] *= prime32_1
 
-		xacc[1] ^= xacc[1] >> 47
-		xacc[1] ^= unalign.Read8(xsecret, 136)
-		xacc[1] *= prime32_1
+		accs[1] ^= accs[1] >> 47
+		accs[1] ^= key64_136
+		accs[1] *= prime32_1
 
-		xacc[2] ^= xacc[2] >> 47
-		xacc[2] ^= unalign.Read8(xsecret, 144)
-		xacc[2] *= prime32_1
+		accs[2] ^= accs[2] >> 47
+		accs[2] ^= key64_144
+		accs[2] *= prime32_1
 
-		xacc[3] ^= xacc[3] >> 47
-		xacc[3] ^= unalign.Read8(xsecret, 152)
-		xacc[3] *= prime32_1
+		accs[3] ^= accs[3] >> 47
+		accs[3] ^= key64_152
+		accs[3] *= prime32_1
 
-		xacc[4] ^= xacc[4] >> 47
-		xacc[4] ^= unalign.Read8(xsecret, 160)
-		xacc[4] *= prime32_1
+		accs[4] ^= accs[4] >> 47
+		accs[4] ^= key64_160
+		accs[4] *= prime32_1
 
-		xacc[5] ^= xacc[5] >> 47
-		xacc[5] ^= unalign.Read8(xsecret, 168)
-		xacc[5] *= prime32_1
+		accs[5] ^= accs[5] >> 47
+		accs[5] ^= key64_168
+		accs[5] *= prime32_1
 
-		xacc[6] ^= xacc[6] >> 47
-		xacc[6] ^= unalign.Read8(xsecret, 176)
-		xacc[6] *= prime32_1
+		accs[6] ^= accs[6] >> 47
+		accs[6] ^= key64_176
+		accs[6] *= prime32_1
 
-		xacc[7] ^= xacc[7] >> 47
-		xacc[7] ^= unalign.Read8(xsecret, 184)
-		xacc[7] *= prime32_1
-
+		accs[7] ^= accs[7] >> 47
+		accs[7] ^= key64_184
+		accs[7] *= prime32_1
 	}
-	l -= _block * j
 
-	// last partial block (1024 bytes)
 	if l > 0 {
-		k := xsecret
-		i := uint64(0)
-		for ; i < (l-1)/_stripe; i++ {
-			dataVec := unalign.Read8(xinput, 8*0)
-			keyVec := dataVec ^ unalign.Read8(k, 8*0)
-			xacc[1] += dataVec
-			xacc[0] += (keyVec & 0xffffffff) * (keyVec >> 32)
+		t, k := (l-1)/_stripe, key
 
-			dataVec1 := unalign.Read8(xinput, 8*1)
-			keyVec1 := dataVec1 ^ unalign.Read8(k, 8*1)
-			xacc[0] += dataVec1
-			xacc[1] += (keyVec1 & 0xffffffff) * (keyVec1 >> 32)
+		for i := uint64(0); i < t; i++ {
+			dv0 := unalign.Read8(p, 8*0)
+			dk0 := dv0 ^ unalign.Read8(k, 8*0)
+			accs[1] += dv0
+			accs[0] += (dk0 & 0xffffffff) * (dk0 >> 32)
 
-			dataVec2 := unalign.Read8(xinput, 8*2)
-			keyVec2 := dataVec2 ^ unalign.Read8(k, 8*2)
-			xacc[3] += dataVec2
-			xacc[2] += (keyVec2 & 0xffffffff) * (keyVec2 >> 32)
+			dv1 := unalign.Read8(p, 8*1)
+			dk1 := dv1 ^ unalign.Read8(k, 8*1)
+			accs[0] += dv1
+			accs[1] += (dk1 & 0xffffffff) * (dk1 >> 32)
 
-			dataVec3 := unalign.Read8(xinput, 8*3)
-			keyVec3 := dataVec3 ^ unalign.Read8(k, 8*3)
-			xacc[2] += dataVec3
-			xacc[3] += (keyVec3 & 0xffffffff) * (keyVec3 >> 32)
+			dv2 := unalign.Read8(p, 8*2)
+			dk2 := dv2 ^ unalign.Read8(k, 8*2)
+			accs[3] += dv2
+			accs[2] += (dk2 & 0xffffffff) * (dk2 >> 32)
 
-			dataVec4 := unalign.Read8(xinput, 8*4)
-			keyVec4 := dataVec4 ^ unalign.Read8(k, 8*4)
-			xacc[5] += dataVec4
-			xacc[4] += (keyVec4 & 0xffffffff) * (keyVec4 >> 32)
+			dv3 := unalign.Read8(p, 8*3)
+			dk3 := dv3 ^ unalign.Read8(k, 8*3)
+			accs[2] += dv3
+			accs[3] += (dk3 & 0xffffffff) * (dk3 >> 32)
 
-			dataVec5 := unalign.Read8(xinput, 8*5)
-			keyVec5 := dataVec5 ^ unalign.Read8(k, 8*5)
-			xacc[4] += dataVec5
-			xacc[5] += (keyVec5 & 0xffffffff) * (keyVec5 >> 32)
+			dv4 := unalign.Read8(p, 8*4)
+			dk4 := dv4 ^ unalign.Read8(k, 8*4)
+			accs[5] += dv4
+			accs[4] += (dk4 & 0xffffffff) * (dk4 >> 32)
 
-			dataVec6 := unalign.Read8(xinput, 8*6)
-			keyVec6 := dataVec6 ^ unalign.Read8(k, 8*6)
-			xacc[7] += dataVec6
-			xacc[6] += (keyVec6 & 0xffffffff) * (keyVec6 >> 32)
+			dv5 := unalign.Read8(p, 8*5)
+			dk5 := dv5 ^ unalign.Read8(k, 8*5)
+			accs[4] += dv5
+			accs[5] += (dk5 & 0xffffffff) * (dk5 >> 32)
 
-			dataVec7 := unalign.Read8(xinput, 8*7)
-			keyVec7 := dataVec7 ^ unalign.Read8(k, 8*7)
-			xacc[6] += dataVec7
-			xacc[7] += (keyVec7 & 0xffffffff) * (keyVec7 >> 32)
+			dv6 := unalign.Read8(p, 8*6)
+			dk6 := dv6 ^ unalign.Read8(k, 8*6)
+			accs[7] += dv6
+			accs[6] += (dk6 & 0xffffffff) * (dk6 >> 32)
 
-			xinput, k = unsafe.Pointer(uintptr(xinput)+_stripe), unsafe.Pointer(uintptr(k)+8)
+			dv7 := unalign.Read8(p, 8*7)
+			dk7 := dv7 ^ unalign.Read8(k, 8*7)
+			accs[6] += dv7
+			accs[7] += (dk7 & 0xffffffff) * (dk7 >> 32)
+
+			l -= _stripe
+			if l > 0 {
+				p, k = unsafe.Pointer(uintptr(p)+_stripe), unsafe.Pointer(uintptr(k)+8)
+			}
 		}
-		l -= _stripe * i
 
-		// last stripe (64 bytes)
 		if l > 0 {
-			xinput = unsafe.Pointer(uintptr(xinput) - uintptr(_stripe-l))
-			k = unsafe.Pointer(uintptr(xsecret) + 121)
+			p = unsafe.Pointer(uintptr(p) - uintptr(_stripe-l))
 
-			dataVec := unalign.Read8(xinput, 8*0)
-			keyVec := dataVec ^ unalign.Read8(k, 8*0)
-			xacc[1] += dataVec
-			xacc[0] += (keyVec & 0xffffffff) * (keyVec >> 32)
+			dv0 := unalign.Read8(p, 8*0)
+			dk0 := dv0 ^ key64_121
+			accs[1] += dv0
+			accs[0] += (dk0 & 0xffffffff) * (dk0 >> 32)
 
-			dataVec1 := unalign.Read8(xinput, 8*1)
-			keyVec1 := dataVec1 ^ unalign.Read8(k, 8*1)
-			xacc[0] += dataVec1
-			xacc[1] += (keyVec1 & 0xffffffff) * (keyVec1 >> 32)
+			dv1 := unalign.Read8(p, 8*1)
+			dk1 := dv1 ^ key64_129
+			accs[0] += dv1
+			accs[1] += (dk1 & 0xffffffff) * (dk1 >> 32)
 
-			dataVec2 := unalign.Read8(xinput, 8*2)
-			keyVec2 := dataVec2 ^ unalign.Read8(k, 8*2)
-			xacc[3] += dataVec2
-			xacc[2] += (keyVec2 & 0xffffffff) * (keyVec2 >> 32)
+			dv2 := unalign.Read8(p, 8*2)
+			dk2 := dv2 ^ key64_137
+			accs[3] += dv2
+			accs[2] += (dk2 & 0xffffffff) * (dk2 >> 32)
 
-			dataVec3 := unalign.Read8(xinput, 8*3)
-			keyVec3 := dataVec3 ^ unalign.Read8(k, 8*3)
-			xacc[2] += dataVec3
-			xacc[3] += (keyVec3 & 0xffffffff) * (keyVec3 >> 32)
+			dv3 := unalign.Read8(p, 8*3)
+			dk3 := dv3 ^ key64_145
+			accs[2] += dv3
+			accs[3] += (dk3 & 0xffffffff) * (dk3 >> 32)
 
-			dataVec4 := unalign.Read8(xinput, 8*4)
-			keyVec4 := dataVec4 ^ unalign.Read8(k, 8*4)
-			xacc[5] += dataVec4
-			xacc[4] += (keyVec4 & 0xffffffff) * (keyVec4 >> 32)
+			dv4 := unalign.Read8(p, 8*4)
+			dk4 := dv4 ^ key64_153
+			accs[5] += dv4
+			accs[4] += (dk4 & 0xffffffff) * (dk4 >> 32)
 
-			dataVec5 := unalign.Read8(xinput, 8*5)
-			keyVec5 := dataVec5 ^ unalign.Read8(k, 8*5)
-			xacc[4] += dataVec5
-			xacc[5] += (keyVec5 & 0xffffffff) * (keyVec5 >> 32)
+			dv5 := unalign.Read8(p, 8*5)
+			dk5 := dv5 ^ key64_161
+			accs[4] += dv5
+			accs[5] += (dk5 & 0xffffffff) * (dk5 >> 32)
 
-			dataVec6 := unalign.Read8(xinput, 8*6)
-			keyVec6 := dataVec6 ^ unalign.Read8(k, 8*6)
-			xacc[7] += dataVec6
-			xacc[6] += (keyVec6 & 0xffffffff) * (keyVec6 >> 32)
+			dv6 := unalign.Read8(p, 8*6)
+			dk6 := dv6 ^ key64_169
+			accs[7] += dv6
+			accs[6] += (dk6 & 0xffffffff) * (dk6 >> 32)
 
-			dataVec7 := unalign.Read8(xinput, 8*7)
-			keyVec7 := dataVec7 ^ unalign.Read8(k, 8*7)
-			xacc[6] += dataVec7
-			xacc[7] += (keyVec7 & 0xffffffff) * (keyVec7 >> 32)
+			dv7 := unalign.Read8(p, 8*7)
+			dk7 := dv7 ^ key64_177
+			accs[6] += dv7
+			accs[7] += (dk7 & 0xffffffff) * (dk7 >> 32)
 		}
 	}
 }
