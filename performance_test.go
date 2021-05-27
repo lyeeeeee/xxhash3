@@ -37,9 +37,9 @@ func BenchmarkDefault(b *testing.B) {
 	benchLen17_128(b, all)
 	benchLen129_240(b, all)
 	benchLen241_1024(b, all)
-	benchScalar(b, all)
-	benchAVX2(b, all)
-	benchSSE2(b, all)
+	//benchScalar(b, all)
+	//benchAVX2(b, all)
+	//benchSSE2(b, all)
 
 }
 
