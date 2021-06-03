@@ -20,23 +20,23 @@ func init() {
 
 type benchTask struct {
 	name      string
-	version 	int
+	version   int
 	action    func(b []byte) uint64
 	action128 func(b []byte) [2]uint64
 }
 
 func BenchmarkDefault(b *testing.B) {
 	all := []benchTask{{
-		name: "Baseline64", version:64, action: func(b []byte) uint64 {
+		name: "Baseline64", version: 64, action: func(b []byte) uint64 {
 			return xxh3.Hash(b)
 		}}, {
-		name: "Target64", version:64,action: func(b []byte) uint64 {
+		name: "Target64", version: 64, action: func(b []byte) uint64 {
 			return Hash(b)
 		}}, {
-		name: "Baseline128",version:128, action128: func(b []byte) [2]uint64 {
+		name: "Baseline128", version: 128, action128: func(b []byte) [2]uint64 {
 			return xxh3.Hash128(b)
 		}}, {
-		name: "Target128", version:128,action128: func(b []byte) [2]uint64 {
+		name: "Target128", version: 128, action128: func(b []byte) [2]uint64 {
 			return Hash128(b)
 		}},
 	}
@@ -57,10 +57,10 @@ func benchLen0_16(b *testing.B, benchTasks []benchTask) {
 			for n := 0; n < b.N; n++ {
 				for i := 0; i <= 16; i++ {
 					input := dat[b.N : b.N+i]
-					if v.version == 64{
+					if v.version == 64 {
 						a := v.action(input)
 						runtime.KeepAlive(a)
-					}else{
+					} else {
 						a := v.action128(input)
 						runtime.KeepAlive(a)
 					}
@@ -77,10 +77,10 @@ func benchLen17_128(b *testing.B, benchTasks []benchTask) {
 			for n := 0; n < b.N; n++ {
 				for i := 17; i <= 128; i++ {
 					input := dat[b.N : b.N+i]
-					if v.version == 64{
+					if v.version == 64 {
 						a := v.action(input)
 						runtime.KeepAlive(a)
-					}else{
+					} else {
 						a := v.action128(input)
 						runtime.KeepAlive(a)
 					}
@@ -97,10 +97,10 @@ func benchLen129_240(b *testing.B, benchTasks []benchTask) {
 			for n := 0; n < b.N; n++ {
 				for i := 129; i <= 240; i++ {
 					input := dat[b.N : b.N+i]
-					if v.version == 64{
+					if v.version == 64 {
 						a := v.action(input)
 						runtime.KeepAlive(a)
-					}else{
+					} else {
 						a := v.action128(input)
 						runtime.KeepAlive(a)
 					}
@@ -119,10 +119,10 @@ func benchLen241_1024(b *testing.B, benchTasks []benchTask) {
 			for n := 0; n < b.N; n++ {
 				for i := 241; i <= 1024; i++ {
 					input := dat[b.N : b.N+i]
-					if v.version == 64{
+					if v.version == 64 {
 						a := v.action(input)
 						runtime.KeepAlive(a)
-					}else{
+					} else {
 						a := v.action128(input)
 						runtime.KeepAlive(a)
 					}
@@ -141,10 +141,10 @@ func benchScalar(b *testing.B, benchTasks []benchTask) {
 			b.ResetTimer()
 			for n := 0; n < b.N; n++ {
 				input := dat[n:33554432]
-				if v.version == 64{
+				if v.version == 64 {
 					a := v.action(input)
 					runtime.KeepAlive(a)
-				}else{
+				} else {
 					a := v.action128(input)
 					runtime.KeepAlive(a)
 				}
@@ -162,10 +162,10 @@ func benchAVX2(b *testing.B, benchTasks []benchTask) {
 			b.ResetTimer()
 			for n := 0; n < b.N; n++ {
 				input := dat[n:33554432]
-				if v.version == 64{
+				if v.version == 64 {
 					a := v.action(input)
 					runtime.KeepAlive(a)
-				}else{
+				} else {
 					a := v.action128(input)
 					runtime.KeepAlive(a)
 				}
@@ -182,10 +182,10 @@ func benchSSE2(b *testing.B, benchTasks []benchTask) {
 			b.ResetTimer()
 			for n := 0; n < b.N; n++ {
 				input := dat[n:33554432]
-				if v.version == 64{
+				if v.version == 64 {
 					a := v.action(input)
 					runtime.KeepAlive(a)
-				}else{
+				} else {
 					a := v.action128(input)
 					runtime.KeepAlive(a)
 				}
