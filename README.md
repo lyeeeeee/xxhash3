@@ -95,6 +95,7 @@ MEMORY: 32G
 ```
 go test -run=None -bench=. -cpu=4 -benchtime=1000x -count=10 > 1000_10.txt && benchstat 1000_10.txt
 ```
+```
 name                               time/op
 Default/Len0_16/Baseline64-4       88.6ns ± 0%
 Default/Len0_16/Target64-4         87.7ns ± 0%
@@ -124,3 +125,4 @@ Default/SSE2/Baseline64-4          2.58ms ± 6%
 Default/SSE2/Target64-4            2.56ms ± 6%
 Default/SSE2/Baseline128-4         2.59ms ± 5%
 Default/SSE2/Target128-4           2.62ms ± 5%
+```
