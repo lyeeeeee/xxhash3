@@ -15,6 +15,37 @@ const (
 	prime64_3 = 1609587929392839161
 	prime64_4 = 9650029242287828579
 	prime64_5 = 2870177450012600261
+
+	xsecret_000 uint64 = 0xbe4ba423396cfeb8
+	xsecret_008 uint64 = 0x1cad21f72c81017c
+	xsecret_016 uint64 = 0xdb979083e96dd4de
+	xsecret_024 uint64 = 0x1f67b3b7a4a44072
+	xsecret_032 uint64 = 0x78e5c0cc4ee679cb
+	xsecret_040 uint64 = 0x2172ffcc7dd05a82
+	xsecret_048 uint64 = 0x8e2443f7744608b8
+	xsecret_056 uint64 = 0x4c263a81e69035e0
+	xsecret_064 uint64 = 0xcb00c391bb52283c
+	xsecret_072 uint64 = 0xa32e531b8b65d088
+	xsecret_080 uint64 = 0x4ef90da297486471
+	xsecret_088 uint64 = 0xd8acdea946ef1938
+	xsecret_096 uint64 = 0x3f349ce33f76faa8
+	xsecret_104 uint64 = 0x1d4f0bc7c7bbdcf9
+	xsecret_112 uint64 = 0x3159b4cd4be0518a
+	xsecret_120 uint64 = 0x647378d9c97e9fc8
+
+	xsecret_011 uint64 = 0x6dd4de1cad21f72c
+	xsecret_019 uint64 = 0xa44072db979083e9
+	xsecret_027 uint64 = 0xe679cb1f67b3b7a4
+	xsecret_035 uint64 = 0xd05a8278e5c0cc4e
+	xsecret_043 uint64 = 0x4608b82172ffcc7d
+	xsecret_051 uint64 = 0x9035e08e2443f774
+	xsecret_059 uint64 = 0x52283c4c263a81e6
+	xsecret_067 uint64 = 0x65d088cb00c391bb
+
+	xsecret32_000 uint32 = 0xbe4ba423
+	xsecret32_004 uint32 = 0x396cfeb8
+	xsecret32_008 uint32 = 0x1cad21f7
+	xsecret32_012 uint32 = 0x2c81017c
 )
 
 var xsecret = unsafe.Pointer(&[192]uint8{

@@ -25,15 +25,15 @@ type benchTask struct {
 
 func BenchmarkDefault(b *testing.B) {
 	all := []benchTask{{
-		name: "Target", action: func(b []byte) uint64 {
-			return Hash(b)
-		}}, {
 		name: "Baseline", action: func(b []byte) uint64 {
 			return xxh3.Hash(b)
+		}}, {
+		name: "Target", action: func(b []byte) uint64 {
+			return Hash(b)
 		}},
 	}
 
-	benchLen0_16(b, all)
+	benchLen0_16(b, all) //need solve
 	benchLen17_128(b, all)
 	benchLen129_240(b, all)
 	benchLen241_1024(b, all)
