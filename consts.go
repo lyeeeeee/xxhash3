@@ -42,6 +42,20 @@ const (
 	xsecret_059 uint64 = 0x52283c4c263a81e6
 	xsecret_067 uint64 = 0x65d088cb00c391bb
 
+	xsecret_103 uint64 = 0x4f0bc7c7bbdcf93f
+	xsecret_111 uint64 = 0x59b4cd4be0518a1d
+	xsecret_119 uint64 = 0x7378d9c97e9fc831
+	xsecret_127 uint64 = 0xebd33483acc5ea64
+
+	xsecret_117 uint64 = 0xd9c97e9fc83159b4
+	xsecret_125 uint64 = 0x3483acc5ea647378
+	xsecret_133 uint64 = 0xfaffa081c5c3ebd3
+	xsecret_141 uint64 = 0xb751dd0d17eb6313
+	xsecret_149 uint64 = 0x29265516d349daf0
+	xsecret_157 uint64 = 0x7d58be162b9e68d4
+	xsecret_165 uint64 = 0x7ad1b8f88ffca147
+	xsecret_173 uint64 = 0x958f3acb45ce31d0
+
 	xsecret32_000 uint32 = 0xbe4ba423
 	xsecret32_004 uint32 = 0x396cfeb8
 	xsecret32_008 uint32 = 0x1cad21f7

@@ -33,29 +33,36 @@ func HashString(s string) uint64 {
 	return Hash([]byte(s))
 }
 
-
-func xxh3HashSmall(xinput unsafe.Pointer, l int) uint64 {
-	length := uint64(l)
+func xxh3HashSmall(xinput unsafe.Pointer, length int) uint64 {
 
 	if length > 8 {
-		inputlo := unalign.Read8(xinput, 0) ^ (unalign.Read8(xsecret, 24)) ^ unalign.Read8(xsecret, 32)
-		inputhi := unalign.Read8(xinput, uintptr(length-8)) ^ (unalign.Read8(xsecret, 40)) ^ unalign.Read8(xsecret, 48)
-		acc := length + bits.ReverseBytes64(inputlo) + inputhi + mix(inputlo, inputhi)
-		return xxh3Avalanche(acc)
+		inputlo := unalign.Read8(xinput, 0) ^ xsecret_024 ^ xsecret_032
+		inputhi := unalign.Read8(xinput, uintptr(length-8)) ^ xsecret_040 ^ xsecret_048
+		return xxh3Avalanche(uint64(length) + bits.ReverseBytes64(inputlo) + inputhi + mix(inputlo, inputhi))
 	} else if length >= 4 {
 		input1 := unalign.Read4(xinput, 0)
 		input2 := unalign.Read4(xinput, uintptr(length-4))
 		input64 := input2 + input1<<32
-		keyed := input64 ^ (unalign.Read8(xsecret, 8)) ^ unalign.Read8(xsecret, 16)
-		return xxh3RRMXMX(keyed, length)
-	} else if length > 0 {
-		q := (*[4]byte)(xinput)
-		combined := (uint64(q[0]) << 16) | (uint64(q[length>>1]) << 24) | (uint64(q[length-1]) << 0) | length<<8
-		combined ^= unalign.Read4(xsecret, 0) ^ unalign.Read4(xsecret, 4)
-		return xxh64Avalanche(combined)
-	} else {
-		return 0x2d06800538d394c2
+		keyed := input64 ^ xsecret_008 ^ xsecret_016
+		return xxh3RRMXMX(keyed, uint64(length))
+	} else if length == 3 {
+		c12 := unalign.Read2(xinput, 0)
+		c3 := uint64(*(*uint8)(unsafe.Pointer(uintptr(xinput) + 2)))
+		acc := c12<<16 + c3 + 3<<8
+		acc ^= uint64(xsecret32_000 ^ xsecret32_004)
+		return xxh64Avalanche(acc)
+	} else if length == 2 {
+		c12 := unalign.Read2(xinput, 0)
+		acc := c12*(1<<24+1)>>8 + 2<<8
+		acc ^= uint64(xsecret32_000 ^ xsecret32_004)
+		return xxh64Avalanche(acc)
+	} else if length == 1 {
+		c1 := uint64(*(*uint8)(xinput))
+		acc := c1*(1<<24+1<<16+1) + 1<<8
+		acc ^= uint64(xsecret32_000 ^ xsecret32_004)
+		return xxh64Avalanche(acc)
 	}
+	return 0x2d06800538d394c2
 }
 
 func xxh3HashLarge(xinput unsafe.Pointer, l int) (acc uint64) {
@@ -66,17 +73,17 @@ func xxh3HashLarge(xinput unsafe.Pointer, l int) (acc uint64) {
 		if length > 32 {
 			if length > 64 {
 				if length > 96 {
-					acc += mix(unalign.Read8(xinput, 48)^unalign.Read8(xsecret, 96), unalign.Read8(xinput, 56)^unalign.Read8(xsecret, 104))
-					acc += mix(unalign.Read8(xinput, uintptr(length-64))^unalign.Read8(xsecret, 112), unalign.Read8(xinput, uintptr(length-56))^unalign.Read8(xsecret, 120))
+					acc += mix(unalign.Read8(xinput, 48)^xsecret_096, unalign.Read8(xinput, 56)^xsecret_104)
+					acc += mix(unalign.Read8(xinput, uintptr(length-64))^xsecret_112, unalign.Read8(xinput, uintptr(length-56))^xsecret_120)
 				}
-				acc += mix(unalign.Read8(xinput, 32)^unalign.Read8(xsecret, 64), unalign.Read8(xinput, 40)^unalign.Read8(xsecret, 72))
-				acc += mix(unalign.Read8(xinput, uintptr(length-48))^unalign.Read8(xsecret, 80), unalign.Read8(xinput, uintptr(length-40))^unalign.Read8(xsecret, 88))
+				acc += mix(unalign.Read8(xinput, 32)^xsecret_064, unalign.Read8(xinput, 40)^xsecret_072)
+				acc += mix(unalign.Read8(xinput, uintptr(length-48))^xsecret_080, unalign.Read8(xinput, uintptr(length-40))^xsecret_088)
 			}
-			acc += mix(unalign.Read8(xinput, 16)^unalign.Read8(xsecret, 32), unalign.Read8(xinput, 24)^unalign.Read8(xsecret, 40))
-			acc += mix(unalign.Read8(xinput, uintptr(length-32))^unalign.Read8(xsecret, 48), unalign.Read8(xinput, uintptr(length-24))^unalign.Read8(xsecret, 56))
+			acc += mix(unalign.Read8(xinput, 16)^xsecret_032, unalign.Read8(xinput, 24)^xsecret_040)
+			acc += mix(unalign.Read8(xinput, uintptr(length-32))^xsecret_048, unalign.Read8(xinput, uintptr(length-24))^xsecret_056)
 		}
-		acc += mix(unalign.Read8(xinput, 0)^unalign.Read8(xsecret, 0), unalign.Read8(xinput, 8)^unalign.Read8(xsecret, 8))
-		acc += mix(unalign.Read8(xinput, uintptr(length-16))^unalign.Read8(xsecret, 16), unalign.Read8(xinput, uintptr(length-8))^unalign.Read8(xsecret, 24))
+		acc += mix(unalign.Read8(xinput, 0)^xsecret_000, unalign.Read8(xinput, 8)^xsecret_008)
+		acc += mix(unalign.Read8(xinput, uintptr(length-16))^xsecret_016, unalign.Read8(xinput, uintptr(length-8))^xsecret_024)
 
 		return xxh3Avalanche(acc)
 
@@ -105,8 +112,8 @@ func xxh3HashLarge(xinput unsafe.Pointer, l int) (acc uint64) {
 	}
 
 	xacc = [8]uint64{
-	prime32_3, prime64_1, prime64_2, prime64_3,
-	prime64_4, prime32_2, prime64_5, prime32_1}
+		prime32_3, prime64_1, prime64_2, prime64_3,
+		prime64_4, prime32_2, prime64_5, prime32_1}
 
 	acc = length * prime64_1
 

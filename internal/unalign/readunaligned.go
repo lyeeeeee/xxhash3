@@ -19,3 +19,9 @@ func Read4(p unsafe.Pointer, offset uintptr) uint64 {
 	q := (*[4]byte)(p)
 	return uint64(q[0]) | uint64(q[1])<<8 | uint64(q[2])<<16 | uint64(q[3])<<24
 }
+
+func Read2(p unsafe.Pointer, offset uintptr) uint64 {
+	p = unsafe.Pointer(uintptr(p) + offset)
+	q := (*[2]byte)(p)
+	return uint64(q[0]) | uint64(q[1])<<8
+}
