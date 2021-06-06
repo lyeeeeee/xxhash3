@@ -97,32 +97,32 @@ go test -run=None -bench=. -cpu=4 -benchtime=1000x -count=10 > 1000_10.txt && be
 ```
 ```
 name                               time/op
-Default/Len0_16/Baseline64-4       88.6ns ± 0%
-Default/Len0_16/Target64-4         87.7ns ± 0%
-Default/Len0_16/Baseline128-4       182ns ± 0%
-Default/Len0_16/Target128-4         178ns ± 0%
-Default/Len17_128/Baseline64-4     1.09µs ± 0%
-Default/Len17_128/Target64-4       1.08µs ± 1%
+Default/Len0_16/Baseline64-4       88.4ns ± 2%
+Default/Len0_16/Target64-4         88.6ns ± 0%
+Default/Len0_16/Baseline128-4      182ns ± 0%
+Default/Len0_16/Target128-4        176ns ± 0%
+Default/Len17_128/Baseline64-4     1.09µs ± 2%
+Default/Len17_128/Target64-4       1.07µs ± 2%
 Default/Len17_128/Baseline128-4    1.91µs ± 0%
-Default/Len17_128/Target128-4      1.76µs ± 0%
+Default/Len17_128/Target128-4      1.76µs ± 1%
 Default/Len129_240/Baseline64-4    1.93µs ± 1%
-Default/Len129_240/Target64-4      1.86µs ± 1%
+Default/Len129_240/Target64-4      1.89µs ± 2%
 Default/Len129_240/Baseline128-4   3.01µs ± 0%
-Default/Len129_240/Target128-4     2.82µs ± 2%
-Default/Len241_1024/Baseline64-4   54.3µs ± 1%
+Default/Len129_240/Target128-4     2.82µs ± 3%
+Default/Len241_1024/Baseline64-4   55.5µs ± 1%
 Default/Len241_1024/Target64-4     47.9µs ± 0%
-Default/Len241_1024/Baseline128-4  60.0µs ± 2%
-Default/Len241_1024/Target128-4    52.7µs ± 1%
+Default/Len241_1024/Baseline128-4  59.9µs ± 1%
+Default/Len241_1024/Target128-4    52.8µs ± 1%
 Default/Scalar/Baseline64-4        3.87ms ± 1%
-Default/Scalar/Target64-4          3.54ms ± 3%
-Default/Scalar/Baseline128-4       3.84ms ± 1%
-Default/Scalar/Target128-4         3.51ms ± 1%
-Default/AVX2/Baseline64-4          2.02ms ± 4%
-Default/AVX2/Target64-4            1.92ms ± 1%
-Default/AVX2/Baseline128-4         2.03ms ± 4%
-Default/AVX2/Target128-4           1.92ms ± 1%
-Default/SSE2/Baseline64-4          2.58ms ± 6%
-Default/SSE2/Target64-4            2.56ms ± 6%
-Default/SSE2/Baseline128-4         2.59ms ± 5%
-Default/SSE2/Target128-4           2.62ms ± 5%
+Default/Scalar/Target64-4          3.52ms ± 2%
+Default/Scalar/Baseline128-4       3.87ms ± 1%
+Default/Scalar/Target128-4         3.52ms ± 1%
+Default/AVX2/Baseline64-4          2.10ms ± 3%
+Default/AVX2/Target64-4            1.93ms ± 2%
+Default/AVX2/Baseline128-4         2.05ms ± 2%
+Default/AVX2/Target128-4           1.91ms ± 1%
+Default/SSE2/Baseline64-4          2.68ms ± 4%
+Default/SSE2/Target64-4            2.61ms ± 2%
+Default/SSE2/Baseline128-4         2.64ms ± 1%
+Default/SSE2/Target128-4           2.63ms ± 4%
 ```
